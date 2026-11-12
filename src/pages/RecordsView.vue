@@ -89,17 +89,19 @@ function clearRecords(): void {
       <button type="button" class="btn primary" @click="router.push('/')">去训练</button>
     </div>
 
-    <h2 class="section-title history-title">最近训练</h2>
-    <ul v-if="recent.length > 0" class="history">
-      <li v-for="session in recent" :key="session.id" class="history-item">
-        <span>{{ session.size }}×{{ session.size }} · {{ formatDate(session.finishedAt) }}</span>
-        <span>{{ formatDuration(session.totalMs) }} · 错 {{ session.errors }}</span>
-      </li>
-    </ul>
-    <p v-else class="empty-hint">暂无训练记录。</p>
+    <section class="history-panel">
+      <h2 class="section-title history-title">最近训练</h2>
+      <ul v-if="recent.length > 0" class="history">
+        <li v-for="session in recent" :key="session.id" class="history-item">
+          <span>{{ session.size }}×{{ session.size }} · {{ formatDate(session.finishedAt) }}</span>
+          <span>{{ formatDuration(session.totalMs) }} · 错 {{ session.errors }}</span>
+        </li>
+      </ul>
+      <p v-else class="empty-hint">暂无训练记录。</p>
 
-    <button v-if="recent.length > 0" type="button" class="btn clear" @click="clearRecords">
-      清空记录
-    </button>
+      <button v-if="recent.length > 0" type="button" class="btn clear" @click="clearRecords">
+        清空记录
+      </button>
+    </section>
   </main>
 </template>

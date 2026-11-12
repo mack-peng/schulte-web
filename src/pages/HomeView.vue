@@ -62,7 +62,8 @@ function start(size: GridSize, mode: GameMode = 'free'): void {
 </script>
 
 <template>
-  <main class="page">
+  <main class="page home-page">
+    <div class="home-main">
     <header class="hero">
       <span class="eyebrow">VISUAL SEARCH TRAINING</span>
       <h1 class="title">舒尔特方格</h1>
@@ -78,6 +79,7 @@ function start(size: GridSize, mode: GameMode = 'free'): void {
       <span class="daily-badge" aria-hidden="true">→</span>
     </button>
 
+    <section class="modes-section">
     <div class="section-head">
       <h2 class="section-title">选择尺寸</h2>
       <span class="section-note">成人标准 5×5</span>
@@ -102,7 +104,10 @@ function start(size: GridSize, mode: GameMode = 'free'): void {
         </span>
       </button>
     </div>
+    </section>
+    </div>
 
+    <aside class="home-aside">
     <div class="settings-row card">
       <span>
         <span class="settings-label">困难模式</span>
@@ -120,6 +125,15 @@ function start(size: GridSize, mode: GameMode = 'free'): void {
       </button>
     </div>
 
+    <div class="tips card">
+      <span class="tips-title">训练提示</span>
+      <ul class="tips-list">
+        <li>视线留在方格中央，用周边视觉找数字。</li>
+        <li>先准后快，误点比慢半秒更伤节奏。</li>
+        <li>看最近几局的中位数，不看单次最好。</li>
+      </ul>
+    </div>
+
     <p v-if="!storageOk" class="storage-warning">当前浏览器无法使用本地存储，成绩不会被保存。</p>
 
     <div class="links">
@@ -130,6 +144,7 @@ function start(size: GridSize, mode: GameMode = 'free'): void {
     <p class="disclaimer">
       本工具为视觉搜索训练游戏，不构成医疗或心理诊断。成绩受设备、视距与练习影响，请与自己历史成绩比较。
     </p>
+    </aside>
 
     <div v-if="showHelp" class="overlay" @click.self="showHelp = false">
       <div class="overlay-card help-card">

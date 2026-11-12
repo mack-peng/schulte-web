@@ -151,40 +151,46 @@ async function share(): Promise<void> {
 
 <template>
   <main class="page game-page">
-    <div class="hud">
-      <div class="hud-item">
-        <span class="hud-label">用时</span>
-        <strong class="hud-value">{{ elapsedText }}</strong>
-      </div>
-      <div class="hud-item">
-        <span class="hud-label">下一个</span>
-        <strong class="hud-value target">{{ status === 'idle' ? 1 : next }}</strong>
-      </div>
-      <div class="hud-item">
-        <span class="hud-label">错误</span>
-        <strong class="hud-value">{{ errors }}</strong>
-      </div>
-    </div>
+    <div class="game-layout">
+      <aside class="game-panel">
+        <div class="hud">
+          <div class="hud-item">
+            <span class="hud-label">用时</span>
+            <strong class="hud-value">{{ elapsedText }}</strong>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">下一个</span>
+            <strong class="hud-value target">{{ status === 'idle' ? 1 : next }}</strong>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">错误</span>
+            <strong class="hud-value">{{ errors }}</strong>
+          </div>
+        </div>
 
-    <GridBoard
-      :grid="grid"
-      :size="size"
-      :done="done"
-      :hard-mode="settings.hardMode"
-      :wrong-value="wrongValue"
-      :disabled="status === 'paused' || status === 'finished'"
-      @tap="onTap"
-    />
+        <p class="tip">
+          {{ status === 'idle' ? '点击 1 开始计时 · 视线尽量留在方格中央' : '保持节奏，先准后快' }}
+        </p>
 
-    <p class="tip">
-      {{ status === 'idle' ? '点击 1 开始计时 · 视线尽量留在方格中央' : '保持节奏，先准后快' }}
-    </p>
+        <div class="actions">
+          <button type="button" class="btn ghost" @click="togglePause">
+            {{ status === 'paused' ? '继续' : '暂停' }}
+          </button>
+          <button type="button" class="btn ghost" @click="again">重开</button>
+        </div>
+      </aside>
 
-    <div class="actions">
-      <button type="button" class="btn ghost" @click="togglePause">
-        {{ status === 'paused' ? '继续' : '暂停' }}
-      </button>
-      <button type="button" class="btn ghost" @click="again">重开</button>
+      <div class="game-board-area">
+        <GridBoard
+          :grid="grid"
+          :size="size"
+          :done="done"
+          :hard-mode="settings.hardMode"
+          :wrong-value="wrongValue"
+          :disabled="status === 'paused' || status === 'finished'"
+          @tap="onTap"
+        />
+      </div>
     </div>
 
     <div v-if="status === 'paused'" class="overlay" @click="resume">

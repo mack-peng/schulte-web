@@ -21,7 +21,7 @@ let observer: ResizeObserver | null = null
 
 const gap = computed(() => (props.size <= 4 ? 8 : 6))
 const cellPx = computed(() => {
-  const available = Math.min(boardWidth.value || 320, 480)
+  const available = Math.min(boardWidth.value || 320, 560)
   const inner = available - gap.value * (props.size - 1)
   return Math.max(28, Math.floor(inner / props.size))
 })

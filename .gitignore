@@ -5,3 +5,4 @@ dist/
 .codegraph/
 .cssgraph/
 *.tsbuildinfo
+.playwright-cli/
