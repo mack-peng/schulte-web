@@ -5,8 +5,9 @@ import { useTheme } from '@/composables/useTheme'
 import { utcDateKey } from '@/core/daily'
 import { formatDuration } from '@/core/metrics'
 import {
-  bestForSize,
+  bestBySize,
   loadDaily,
+  loadSessions,
   loadSettings,
   saveSettings,
   storageAvailable
@@ -15,7 +16,6 @@ import type { DailyResult, GameMode, GridSize, Settings } from '@/core/types'
 
 const router = useRouter()
 const { theme, toggleTheme } = useTheme()
-const sizes: GridSize[] = [3, 4, 5, 6]
 const modes: { size: GridSize; tag: string; desc: string }[] = [
   { size: 3, tag: '入门', desc: '儿童 / 热身' },
   { size: 4, tag: '轻松', desc: '过渡尺寸' },
@@ -42,9 +42,7 @@ const dailyText = computed(() =>
 onMounted(() => {
   storageOk.value = storageAvailable()
   settings.value = loadSettings()
-  sizes.forEach((size) => {
-    bests.value[size] = bestForSize(size)
-  })
+  bests.value = bestBySize(loadSessions())
   daily.value = loadDaily()[today] ?? null
 })
 

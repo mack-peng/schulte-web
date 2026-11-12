@@ -55,6 +55,15 @@ export function bestForSize(size: GridSize): number | null {
   return Math.min(...sessions.map((session) => session.totalMs))
 }
 
+export function bestBySize(sessions: SessionRecord[]): Record<GridSize, number | null> {
+  const bests: Record<GridSize, number | null> = { 3: null, 4: null, 5: null, 6: null }
+  for (const session of sessions) {
+    const current = bests[session.size]
+    if (current === null || session.totalMs < current) bests[session.size] = session.totalMs
+  }
+  return bests
+}
+
 export function loadDaily(): Record<string, DailyResult> {
   const value = read<Record<string, DailyResult>>(KEYS.daily, {})
   return value && typeof value === 'object' ? value : {}

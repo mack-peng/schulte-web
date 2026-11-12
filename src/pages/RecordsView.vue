@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import TrendBars from '@/components/TrendBars.vue'
 import { formatDuration } from '@/core/metrics'
-import { bestForSize, clearAll, loadSessions, storageAvailable } from '@/core/storage'
+import { bestBySize, clearAll, loadSessions, storageAvailable } from '@/core/storage'
 import type { GridSize, SessionRecord } from '@/core/types'
 
 const router = useRouter()
@@ -17,12 +17,7 @@ onMounted(() => {
   sessions.value = loadSessions()
 })
 
-const bests = computed<Record<GridSize, number | null>>(() => ({
-  3: bestForSize(3),
-  4: bestForSize(4),
-  5: bestForSize(5),
-  6: bestForSize(6)
-}))
+const bests = computed<Record<GridSize, number | null>>(() => bestBySize(sessions.value))
 
 const trend = computed(() =>
   sessions.value
