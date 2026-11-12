@@ -5,10 +5,10 @@
   --line: #e4dfd4;
   --card: #ffffff;
   --accent: #ff6600;
-  --accent-strong: #c94f00;
+  --accent-strong: #c2410c;
   --accent-text: #b34700;
   --accent-soft: #fff0e6;
-  --on-accent: #1e1c18;
+  --on-accent: #ffffff;
   --overlay: rgba(30, 28, 24, 0.42);
   --danger: #d92d20;
   --danger-soft: #fdecea;
@@ -23,10 +23,10 @@
   --line: #34312b;
   --card: #1f1e1b;
   --accent: #ff6600;
-  --accent-strong: #c94f00;
+  --accent-strong: #c2410c;
   --accent-text: #ff8a3d;
   --accent-soft: #3a2417;
-  --on-accent: #1e1c18;
+  --on-accent: #ffffff;
   --overlay: rgba(0, 0, 0, 0.55);
   --danger: #ff6b5e;
   --danger-soft: #3a1f1c;
@@ -139,7 +139,7 @@ ul {
   margin: 24px 0 28px;
   padding: clamp(16px, 2vw, 22px);
   border: none;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: var(--on-accent);
   text-align: left;
   cursor: pointer;
@@ -173,7 +173,7 @@ ul {
   justify-content: center;
   width: 36px;
   height: 36px;
-  border: 1px solid rgba(30, 28, 24, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 50%;
   font-size: 18px;
 }
@@ -495,8 +495,8 @@ ul {
 }
 
 .btn.primary {
-  border-color: var(--accent);
-  background: var(--accent);
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
   color: var(--on-accent);
 }
 
