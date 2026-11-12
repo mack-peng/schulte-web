@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, ref, shallowRef, triggerRef } from 'vue'
+import { computed, getCurrentInstance, onBeforeUnmount, ref, shallowRef, triggerRef } from 'vue'
 import { dailyGrid } from '@/core/daily'
 import { generateGrid } from '@/core/grid'
 import { summarize } from '@/core/metrics'
@@ -18,6 +18,7 @@ export function useGame(size: GridSize, mode: GameMode) {
   const nowTick = ref(0)
   const result = ref<GameResult | null>(null)
   let tickTimer: ReturnType<typeof setInterval> | null = null
+  let pausedIntervalMs = 0
 
   const elapsedMs = computed(() => {
     const running =
@@ -62,6 +63,7 @@ export function useGame(size: GridSize, mode: GameMode) {
     accumulatedMs.value = 0
     runStartedAt.value = 0
     lastCorrectAt.value = 0
+    pausedIntervalMs = 0
     nowTick.value = 0
     result.value = null
   }
@@ -117,6 +119,7 @@ export function useGame(size: GridSize, mode: GameMode) {
   function pause(): void {
     if (status.value !== 'running') return
     const at = now()
+    pausedIntervalMs = Math.max(0, at - lastCorrectAt.value)
     accumulatedMs.value += Math.max(0, at - runStartedAt.value)
     runStartedAt.value = 0
     nowTick.value = at
@@ -128,7 +131,8 @@ export function useGame(size: GridSize, mode: GameMode) {
     if (status.value !== 'paused') return
     const at = now()
     runStartedAt.value = at
-    lastCorrectAt.value = at
+    lastCorrectAt.value = at - pausedIntervalMs
+    pausedIntervalMs = 0
     nowTick.value = at
     status.value = 'running'
     startTicking()
@@ -138,7 +142,7 @@ export function useGame(size: GridSize, mode: GameMode) {
     reset()
   }
 
-  onBeforeUnmount(stopTicking)
+  if (getCurrentInstance()) onBeforeUnmount(stopTicking)
 
   reset()
 
