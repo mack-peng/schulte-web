@@ -153,6 +153,11 @@ async function share(): Promise<void> {
   <main class="page game-page">
     <div class="game-layout">
       <aside class="game-panel">
+        <div class="game-top">
+          <button type="button" class="back" @click="goHome">← 返回</button>
+          <span class="game-mode">{{ size }}×{{ size }} · {{ mode === 'daily' ? '今日挑战' : '自由训练' }}</span>
+        </div>
+
         <div class="hud">
           <div class="hud-item">
             <span class="hud-label">用时</span>

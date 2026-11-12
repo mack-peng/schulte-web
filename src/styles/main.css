@@ -368,6 +368,18 @@ ul {
   flex-direction: column;
 }
 
+.game-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.game-mode {
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .hud {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
