@@ -23,4 +23,13 @@ describe('generateGrid', () => {
   it('rejects grids with duplicates', () => {
     expect(isValidGrid([1, 1, 2, 3, 4, 5, 6, 7, 8], 3)).toBe(false)
   })
+
+  it('stays fair across seeds', () => {
+    for (let seed = 1; seed <= 20; seed++) {
+      for (const size of [4, 5, 6] as const) {
+        expect(fairnessScore(generateGrid(size, mulberry32(seed)), size)).toBe(0)
+      }
+      expect(fairnessScore(generateGrid(3, mulberry32(seed)), 3)).toBe(8)
+    }
+  })
 })
