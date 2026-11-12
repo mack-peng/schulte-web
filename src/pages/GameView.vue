@@ -23,7 +23,7 @@ const size: GridSize =
 const mode: GameMode = route.query.mode === 'daily' ? 'daily' : 'free'
 const settings = loadSettings()
 
-const { grid, status, next, errors, done, elapsedText, result, tap, pause, resume, restart } =
+const { grid, status, next, errors, done, doneVersion, elapsedText, result, tap, pause, resume, restart } =
   useGame(size, mode)
 
 const wrongValue = ref<number | null>(null)
@@ -190,6 +190,7 @@ async function share(): Promise<void> {
           :grid="grid"
           :size="size"
           :done="done"
+          :done-version="doneVersion"
           :hard-mode="settings.hardMode"
           :wrong-value="wrongValue"
           :disabled="status === 'paused' || status === 'finished'"

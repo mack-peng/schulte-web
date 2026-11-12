@@ -6,6 +6,7 @@ const props = defineProps<{
   grid: number[]
   size: GridSize
   done: Set<number>
+  doneVersion: number
   hardMode: boolean
   wrongValue: number | null
   disabled?: boolean

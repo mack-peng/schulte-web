@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed, onBeforeUnmount, ref, shallowRef, triggerRef } from 'vue'
 import { dailyGrid } from '@/core/daily'
 import { generateGrid } from '@/core/grid'
 import { summarize } from '@/core/metrics'
@@ -9,7 +9,8 @@ export function useGame(size: GridSize, mode: GameMode) {
   const status = ref<GameStatus>('idle')
   const next = ref(1)
   const errors = ref(0)
-  const done = ref<Set<number>>(new Set())
+  const done = shallowRef<Set<number>>(new Set())
+  const doneVersion = ref(0)
   const intervals = ref<number[]>([])
   const accumulatedMs = ref(0)
   const runStartedAt = ref(0)
@@ -56,6 +57,7 @@ export function useGame(size: GridSize, mode: GameMode) {
     next.value = 1
     errors.value = 0
     done.value = new Set()
+    doneVersion.value += 1
     intervals.value = []
     accumulatedMs.value = 0
     runStartedAt.value = 0
@@ -65,9 +67,9 @@ export function useGame(size: GridSize, mode: GameMode) {
   }
 
   function markDone(value: number): void {
-    const updated = new Set(done.value)
-    updated.add(value)
-    done.value = updated
+    done.value.add(value)
+    doneVersion.value += 1
+    triggerRef(done)
   }
 
   function finish(at: number): void {
@@ -146,6 +148,7 @@ export function useGame(size: GridSize, mode: GameMode) {
     next,
     errors,
     done,
+    doneVersion,
     intervals,
     elapsedMs,
     elapsedText,
