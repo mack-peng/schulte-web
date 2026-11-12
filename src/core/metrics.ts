@@ -59,19 +59,18 @@ export interface SummarizeInput {
 
 export function summarize({ size, totalMs, errors, intervals }: SummarizeInput): Metrics {
   const positive = intervals.filter((interval) => interval > 0)
-  const sorted = positive.slice().sort((a, b) => a - b)
   const average = mean(positive)
   const deviation = stdev(positive)
   const cv = average > 0 ? deviation / average : 0
-  const middle = Math.floor(sorted.length / 2)
-  const firstHalf = medianSorted(sorted, 0, middle)
-  const secondHalf = medianSorted(sorted, middle, sorted.length)
+  const middle = Math.floor(positive.length / 2)
+  const firstHalf = median(positive.slice(0, middle))
+  const secondHalf = median(positive.slice(middle))
   const drift = firstHalf > 0 ? secondHalf / firstHalf : 1
   return {
     totalMs,
     errors,
     perNumberMs: totalMs / (size * size),
-    medianIntervalMs: medianSorted(sorted),
+    medianIntervalMs: median(positive),
     cv,
     drift,
     level: levelFor(size, totalMs)

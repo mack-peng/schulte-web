@@ -40,6 +40,23 @@ describe('summarize', () => {
     expect(metrics.drift).toBe(1)
     expect(Number.isNaN(metrics.perNumberMs)).toBe(false)
   })
+
+  it('uses chronological halves for drift', () => {
+    const accelerated = summarize({
+      size: 5,
+      totalMs: 8000,
+      errors: 0,
+      intervals: [3000, 3000, 1000, 1000]
+    })
+    const decelerated = summarize({
+      size: 5,
+      totalMs: 8000,
+      errors: 0,
+      intervals: [1000, 1000, 3000, 3000]
+    })
+    expect(accelerated.drift).toBeCloseTo(1 / 3)
+    expect(decelerated.drift).toBe(3)
+  })
 })
 
 describe('formatDuration', () => {
