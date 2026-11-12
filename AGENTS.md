@@ -1,38 +1,36 @@
-# schulte-miniapp
+# schulte-web
 
-舒尔特方格小程序：视觉搜索训练工具，纯前端、本地优先。一套代码构建 H5 与微信小程序。
+舒尔特方格 Web 应用：视觉搜索训练工具，纯前端、本地优先。
 
 ## 技术栈
 
-- uni-app (Vue 3 + Vite)
-- 目标平台：H5（静态部署）、微信小程序（`mp-weixin`）
-- 无后端、无登录；训练记录存本地 `uni.setStorageSync`
-- 不引入图表库；趋势图用 CSS 实现
+- Vue 3 + TypeScript + Vite
+- Vue Router（hash 模式，静态部署无需 rewrite）
+- Vitest（核心逻辑单测）
+- 无 UI 库；CSS 变量 + 手写样式
+- 无后端、无登录；训练记录存 `localStorage`
 
 ## 常用命令
 
 ```bash
 npm install
-npm run dev:h5          # H5 开发
-npm run build:h5        # H5 构建，产物 dist/build/h5
-npm run dev:mp-weixin   # 微信小程序开发，产物 dist/dev/mp-weixin
-npm run build:mp-weixin # 微信小程序构建，产物 dist/build/mp-weixin
+npm run dev        # 开发
+npm run build      # 类型检查 + 构建，产物 dist/
+npm run preview    # 预览构建产物
+npm run typecheck  # vue-tsc --noEmit
+npm run test       # vitest run
 ```
-
-微信开发者工具导入 `dist/dev/mp-weixin` 或 `dist/build/mp-weixin`；`src/manifest.json` 的 `mp-weixin.appid` 需替换为实际 AppID。
 
 ## 目录约定
 
 ```text
 src/
-  core/          # 纯逻辑：棋盘生成、指标计算、存储封装
-  pages/
-    index/       # 首页：尺寸选择、最佳成绩、每日挑战
-    game/        # 训练页：棋盘、计时、暂停、结算
-    records/     # 记录页：个人最佳、趋势、历史
-  static/        # 静态资源
-  pages.json     # 路由与导航栏
-  manifest.json  # 应用配置
+  core/          # 纯逻辑：棋盘生成、每日种子、指标、存储
+  composables/   # useGame 状态机
+  pages/         # Home / Game / Records
+  components/    # GridBoard / ResultCard / TrendBars
+  styles/        # 全局样式
+  router/        # hash 路由
 ```
 
 ## 产品原则
@@ -41,21 +39,27 @@ src/
 - **禁止宣称**：提升智商、治疗 ADHD、提升阅读速度 X%、7 天根治注意力问题。
 - **指标解释**：成绩受设备、视距、输入方式与练习影响；引导用户与自己的历史成绩比较。
 - **公平随机**：Fisher–Yates + 公平性评分（避免连续数字相邻、长连续段）；每日挑战用日期种子，保证同一天同一张表。
-- **纯前端边界**：MVP 不做账号、排行榜、云同步；后续需要时再评估微信云开发或后端。
+- **纯前端边界**：MVP 不做账号、排行榜、云同步。
 
 ## 代码规范
 
 - 注释仅在非常规实现处添加，使用英文。
 - 纯逻辑放 `src/core/`，页面只负责状态与渲染。
-- 计时用 `Date.now()`；事件时间优先取 `event.timeStamp`。
-- 触摸目标不小于 44px；连点需防抖；切后台自动暂停。
+- 计时用 `performance.now()`；事件间隔优先取 `event.timeStamp`。
+- 触摸目标不小于 44px；连点需防抖；`visibilitychange` 自动暂停。
 - 提交信息使用英文：`<type>(<scope>): <summary>`。
+
+## Git / GitHub
+
+- 主分支：`main`
+- 功能分支：`feat-` / `fix-` 前缀
+- PR 使用 `gh pr create --base main`
+- 禁止 force push
 
 ## 验证
 
-- `npm run build:h5` 与 `npm run build:mp-weixin` 必须通过。
-- 本地浏览器回归：3×3/4×4/5×5/6×6、计时、错误、暂停、结算、记录、每日挑战、移动端布局。
-- 微信开发者工具检查：页面路由、本地存储、分享、切后台暂停。
+- `npm run typecheck`、`npm run build`、`npm run test` 必须通过。
+- 浏览器回归：3×3/4×4/5×5/6×6、计时、错误、暂停、结算、记录、每日挑战、刷新持久化、移动端布局。
 
 ## 参考
 
