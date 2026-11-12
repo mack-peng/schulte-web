@@ -7,13 +7,19 @@ const BANDS: Record<GridSize, [number, number, number]> = {
   6: [40000, 50000, 60000]
 }
 
+function medianSorted(sorted: number[], start = 0, end = sorted.length): number {
+  const length = end - start
+  if (length <= 0) return 0
+  const middle = start + Math.floor(length / 2)
+  return length % 2 === 0
+    ? (sorted[middle - 1] + sorted[middle]) / 2
+    : sorted[middle]
+}
+
 export function median(values: number[]): number {
   if (values.length === 0) return 0
   const sorted = [...values].sort((a, b) => a - b)
-  const middle = Math.floor(sorted.length / 2)
-  return sorted.length % 2 === 0
-    ? (sorted[middle - 1] + sorted[middle]) / 2
-    : sorted[middle]
+  return medianSorted(sorted)
 }
 
 export function mean(values: number[]): number {
@@ -53,18 +59,19 @@ export interface SummarizeInput {
 
 export function summarize({ size, totalMs, errors, intervals }: SummarizeInput): Metrics {
   const positive = intervals.filter((interval) => interval > 0)
+  const sorted = positive.slice().sort((a, b) => a - b)
   const average = mean(positive)
   const deviation = stdev(positive)
   const cv = average > 0 ? deviation / average : 0
-  const middle = Math.floor(positive.length / 2)
-  const firstHalf = median(positive.slice(0, middle))
-  const secondHalf = median(positive.slice(middle))
+  const middle = Math.floor(sorted.length / 2)
+  const firstHalf = medianSorted(sorted, 0, middle)
+  const secondHalf = medianSorted(sorted, middle, sorted.length)
   const drift = firstHalf > 0 ? secondHalf / firstHalf : 1
   return {
     totalMs,
     errors,
     perNumberMs: totalMs / (size * size),
-    medianIntervalMs: median(positive),
+    medianIntervalMs: medianSorted(sorted),
     cv,
     drift,
     level: levelFor(size, totalMs)
