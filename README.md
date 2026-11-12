@@ -17,6 +17,14 @@ npm run preview    # 预览构建产物
 
 `npm run build` 后把 `dist/` 部署到任意静态服务器即可。Vite 使用 `base: './'`，Vue Router 使用 hash 模式，无需服务端 rewrite，可部署到子路径。
 
+## 打包
+
+```bash
+npm run package
+```
+
+会先执行构建，再把 `dist/` 内容打成 `release/schulte-web-{version}-dist-{YYYY-MM-DD}.tar.gz`（归档根目录即站点根目录，可直接解压部署）。可用 `PACKAGE_OUT_DIR=/path npm run package` 指定输出目录。
+
 ## 结构
 
 ```text
