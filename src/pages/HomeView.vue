@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useTheme } from '@/composables/useTheme'
 import { utcDateKey } from '@/core/daily'
 import { formatDuration } from '@/core/metrics'
 import {
@@ -13,6 +14,7 @@ import {
 import type { DailyResult, GameMode, GridSize, Settings } from '@/core/types'
 
 const router = useRouter()
+const { theme, toggleTheme } = useTheme()
 const sizes: GridSize[] = [3, 4, 5, 6]
 const modes: { size: GridSize; tag: string; desc: string }[] = [
   { size: 3, tag: '入门', desc: '儿童 / 热身' },
@@ -52,7 +54,7 @@ function bestText(size: GridSize): string {
 }
 
 function toggleHardMode(): void {
-  settings.value = { hardMode: !settings.value.hardMode }
+  settings.value = { ...settings.value, hardMode: !settings.value.hardMode }
   saveSettings(settings.value)
 }
 
@@ -65,6 +67,14 @@ function start(size: GridSize, mode: GameMode = 'free'): void {
   <main class="page home-page">
     <div class="home-main">
     <header class="hero">
+      <button
+        type="button"
+        class="theme-toggle"
+        :aria-label="theme === 'dark' ? '切换到浅色模式' : '切换到深色模式'"
+        @click="toggleTheme"
+      >
+        {{ theme === 'dark' ? '☀' : '☾' }}
+      </button>
       <span class="eyebrow">VISUAL SEARCH TRAINING</span>
       <h1 class="title">舒尔特方格</h1>
       <p class="subtitle">按顺序找到数字，训练视觉搜索与持续注意。</p>

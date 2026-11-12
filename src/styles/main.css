@@ -8,9 +8,30 @@
   --accent-strong: #c94f00;
   --accent-text: #b34700;
   --accent-soft: #fff0e6;
+  --on-accent: #1e1c18;
+  --overlay: rgba(30, 28, 24, 0.42);
   --danger: #d92d20;
   --danger-soft: #fdecea;
   --shadow: 0 18px 50px rgba(30, 28, 24, 0.16);
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --paper: #151412;
+  --ink: #f5f2ea;
+  --muted: #a8a196;
+  --line: #34312b;
+  --card: #1f1e1b;
+  --accent: #ff6600;
+  --accent-strong: #c94f00;
+  --accent-text: #ff8a3d;
+  --accent-soft: #3a2417;
+  --on-accent: #1e1c18;
+  --overlay: rgba(0, 0, 0, 0.55);
+  --danger: #ff6b5e;
+  --danger-soft: #3a1f1c;
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
 }
 
 * {
@@ -60,7 +81,25 @@ ul {
 }
 
 .hero {
+  position: relative;
   padding-top: 8px;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 8px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .eyebrow {
@@ -101,7 +140,7 @@ ul {
   padding: clamp(16px, 2vw, 22px);
   border: none;
   background: var(--accent);
-  color: var(--ink);
+  color: var(--on-accent);
   text-align: left;
   cursor: pointer;
 }
@@ -458,7 +497,7 @@ ul {
 .btn.primary {
   border-color: var(--accent);
   background: var(--accent);
-  color: var(--ink);
+  color: var(--on-accent);
 }
 
 .btn.ghost {
@@ -478,7 +517,7 @@ ul {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: rgba(30, 28, 24, 0.42);
+  background: var(--overlay);
 }
 
 .overlay-card {
@@ -722,7 +761,7 @@ ul {
 .tab.is-active {
   border-color: var(--ink);
   background: var(--ink);
-  color: #fff;
+  color: var(--paper);
 }
 
 .trend {

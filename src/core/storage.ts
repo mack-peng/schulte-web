@@ -76,7 +76,8 @@ export function saveDailyResult(dateKey: string, totalMs: number): boolean {
 
 export function loadSettings(): Settings {
   const value = read<Settings>(KEYS.settings, { hardMode: false })
-  return { hardMode: Boolean(value.hardMode) }
+  const theme = value.theme === 'dark' || value.theme === 'light' ? value.theme : undefined
+  return { hardMode: Boolean(value.hardMode), theme }
 }
 
 export function saveSettings(settings: Settings): boolean {

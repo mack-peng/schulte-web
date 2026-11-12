@@ -3,6 +3,7 @@ export type GameMode = 'free' | 'daily'
 export type GameStatus = 'idle' | 'running' | 'paused' | 'finished'
 export type Level = '优秀' | '良好' | '及格' | '继续练'
 export type TapResult = 'ignored' | 'started' | 'correct' | 'wrong' | 'finished'
+export type ThemeMode = 'light' | 'dark'
 
 export interface Metrics {
   totalMs: number
@@ -30,6 +31,7 @@ export interface DailyResult {
 
 export interface Settings {
   hardMode: boolean
+  theme?: ThemeMode
 }
 
 export interface GameResult extends Metrics {
