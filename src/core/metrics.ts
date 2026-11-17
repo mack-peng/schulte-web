@@ -7,6 +7,13 @@ const BANDS: Record<GridSize, [number, number, number]> = {
   6: [40000, 50000, 60000]
 }
 
+const PERCENTILE_ANCHORS: Record<GridSize, [number, number, number]> = {
+  3: [3000, 4000, 5000],
+  4: [6000, 8000, 16000],
+  5: [20000, 25000, 30000],
+  6: [40000, 50000, 60000]
+}
+
 function medianSorted(sorted: number[], start = 0, end = sorted.length): number {
   const length = end - start
   if (length <= 0) return 0
@@ -41,6 +48,21 @@ export function levelFor(size: GridSize, totalMs: number): Level {
   if (totalMs <= good) return '良好'
   if (totalMs <= pass) return '及格'
   return '继续练'
+}
+
+export function percentileFor(size: GridSize, totalMs: number): number {
+  const [t100, t90, t80] = PERCENTILE_ANCHORS[size]
+  let value: number
+  if (totalMs <= t100) {
+    value = 100
+  } else if (totalMs <= t90) {
+    value = 100 - ((totalMs - t100) / (t90 - t100)) * 10
+  } else if (totalMs <= t80) {
+    value = 90 - ((totalMs - t90) / (t80 - t90)) * 10
+  } else {
+    value = 80 - ((totalMs - t80) / (t80 - t90)) * 10
+  }
+  return Math.min(100, Math.max(1, Number(value.toFixed(2))))
 }
 
 export function formatDuration(ms: number): string {

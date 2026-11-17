@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { formatDuration } from '@/core/metrics'
+import { RESULT_COPY } from '@/core/resultCopy'
 import type { GameResult } from '@/core/types'
 
 const props = defineProps<{
@@ -19,13 +20,66 @@ const emit = defineEmits<{
 const showDetails = ref(false)
 const perNumber = computed(() => (props.result.perNumberMs / 1000).toFixed(2))
 const medianInterval = computed(() => (props.result.medianIntervalMs / 1000).toFixed(2))
+
+const copyIndex = ref(Math.floor(Math.random() * RESULT_COPY.length))
+const copyVisible = ref(true)
+
+let rotateTimer: ReturnType<typeof setInterval> | null = null
+let fadeTimer: ReturnType<typeof setTimeout> | null = null
+let reduceMotion = false
+
+function stopRotation(): void {
+  if (rotateTimer !== null) {
+    clearInterval(rotateTimer)
+    rotateTimer = null
+  }
+  if (fadeTimer !== null) {
+    clearTimeout(fadeTimer)
+    fadeTimer = null
+  }
+  copyVisible.value = true
+}
+
+function advanceCopy(): void {
+  if (reduceMotion) {
+    copyIndex.value = (copyIndex.value + 1) % RESULT_COPY.length
+    return
+  }
+  copyVisible.value = false
+  fadeTimer = setTimeout(() => {
+    copyIndex.value = (copyIndex.value + 1) % RESULT_COPY.length
+    copyVisible.value = true
+    fadeTimer = null
+  }, 300)
+}
+
+function startRotation(): void {
+  stopRotation()
+  rotateTimer = setInterval(advanceCopy, 5000)
+}
+
+function onVisibilityChange(): void {
+  if (document.visibilityState === 'hidden') stopRotation()
+  else startRotation()
+}
+
+onMounted(() => {
+  reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  startRotation()
+  document.addEventListener('visibilitychange', onVisibilityChange)
+})
+
+onBeforeUnmount(() => {
+  stopRotation()
+  document.removeEventListener('visibilitychange', onVisibilityChange)
+})
 </script>
 
 <template>
   <div class="result" role="status">
     <span class="result-eyebrow">{{ result.size }}×{{ result.size }} · {{ result.mode === 'daily' ? '今日挑战' : '自由训练' }}</span>
     <strong class="result-time">{{ formatDuration(result.totalMs) }}</strong>
-    <span class="result-level">{{ result.level }}</span>
+    <span class="result-percentile">超过<strong>{{ result.percentile.toFixed(2) }}%</strong>的训练者</span>
     <p v-if="personalBest" class="result-best">新的个人最佳</p>
 
     <div class="result-grid">
@@ -51,6 +105,14 @@ const medianInterval = computed(() => (props.result.medianIntervalMs / 1000).toF
       <p>前后半段漂移：{{ result.drift.toFixed(2) }}</p>
       <p>成绩受设备、视距与练习影响，请与自己的历史成绩比较。</p>
     </div>
+
+    <p
+      class="result-rotating"
+      :class="{ 'is-fading': !copyVisible }"
+      aria-live="off"
+    >
+      {{ RESULT_COPY[copyIndex] }}
+    </p>
 
     <p class="result-note">成人参考区间，非官方常模。</p>
     <p v-if="shareState" class="result-share">{{ shareState }}</p>

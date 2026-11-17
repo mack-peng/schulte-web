@@ -586,13 +586,16 @@ ul {
   line-height: 1;
 }
 
-.result-level {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--accent-soft);
+.result-percentile {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 24px;
+}
+
+.result-percentile strong {
   color: var(--accent-text);
-  font-size: 12px;
+  font-weight: 600;
 }
 
 .result-best {
@@ -647,6 +650,27 @@ ul {
   font-size: 12px;
   line-height: 1.8;
   text-align: left;
+}
+
+.result-rotating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+  transition: opacity 300ms ease;
+}
+
+.details + .result-rotating {
+  margin-top: 10px;
+}
+
+.result-rotating.is-fading {
+  opacity: 0;
 }
 
 .result-note {

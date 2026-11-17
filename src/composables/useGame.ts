@@ -1,7 +1,7 @@
 import { computed, getCurrentInstance, onBeforeUnmount, ref, shallowRef, triggerRef } from 'vue'
 import { dailyGrid } from '@/core/daily'
 import { generateGrid } from '@/core/grid'
-import { summarize } from '@/core/metrics'
+import { percentileFor, summarize } from '@/core/metrics'
 import type { GameMode, GameResult, GameStatus, GridSize, TapResult } from '@/core/types'
 
 export function useGame(size: GridSize, mode: GameMode) {
@@ -83,6 +83,7 @@ export function useGame(size: GridSize, mode: GameMode) {
       size,
       mode,
       intervals: [...intervals.value],
+      percentile: percentileFor(size, totalMs),
       ...summarize({ size, totalMs, errors: errors.value, intervals: intervals.value })
     }
   }
