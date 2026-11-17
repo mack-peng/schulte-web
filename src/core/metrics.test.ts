@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatDuration, levelFor, median, summarize } from './metrics'
+import { formatDuration, levelFor, median, percentileFor, summarize } from './metrics'
 
 describe('median', () => {
   it('handles odd, even and empty arrays', () => {
@@ -15,6 +15,35 @@ describe('levelFor', () => {
     expect(levelFor(5, 20001)).toBe('良好')
     expect(levelFor(5, 25001)).toBe('及格')
     expect(levelFor(5, 30001)).toBe('继续练')
+  })
+})
+
+describe('percentileFor', () => {
+  it('uses the product anchors', () => {
+    expect(percentileFor(3, 3000)).toBe(100)
+    expect(percentileFor(3, 4000)).toBe(90)
+    expect(percentileFor(3, 5000)).toBe(80)
+    expect(percentileFor(4, 6000)).toBe(100)
+    expect(percentileFor(4, 8000)).toBe(90)
+    expect(percentileFor(4, 16000)).toBe(80)
+  })
+
+  it('interpolates between anchors', () => {
+    expect(percentileFor(3, 3500)).toBe(95)
+    expect(percentileFor(4, 7000)).toBe(95)
+    expect(percentileFor(5, 21000)).toBe(98)
+    expect(percentileFor(6, 45000)).toBe(95)
+  })
+
+  it('rounds to two decimals', () => {
+    expect(percentileFor(3, 3333)).toBe(96.67)
+    expect(percentileFor(5, 23930)).toBe(92.14)
+  })
+
+  it('caps fast results and clamps slow results', () => {
+    expect(percentileFor(3, 1000)).toBe(100)
+    expect(percentileFor(3, 6000)).toBe(70)
+    expect(percentileFor(3, 100000)).toBe(1)
   })
 })
 

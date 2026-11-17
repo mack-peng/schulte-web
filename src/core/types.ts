@@ -38,4 +38,5 @@ export interface GameResult extends Metrics {
   size: GridSize
   mode: GameMode
   intervals: number[]
+  percentile: number
 }
