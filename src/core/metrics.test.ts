@@ -26,18 +26,24 @@ describe('percentileFor', () => {
     expect(percentileFor(4, 6000)).toBe(100)
     expect(percentileFor(4, 8000)).toBe(90)
     expect(percentileFor(4, 16000)).toBe(80)
+    expect(percentileFor(5, 10000)).toBe(100)
+    expect(percentileFor(5, 15000)).toBe(90)
+    expect(percentileFor(5, 25000)).toBe(80)
+    expect(percentileFor(6, 14000)).toBe(100)
+    expect(percentileFor(6, 22000)).toBe(90)
+    expect(percentileFor(6, 36000)).toBe(80)
   })
 
   it('interpolates between anchors', () => {
     expect(percentileFor(3, 3500)).toBe(95)
     expect(percentileFor(4, 7000)).toBe(95)
-    expect(percentileFor(5, 21000)).toBe(98)
-    expect(percentileFor(6, 45000)).toBe(95)
+    expect(percentileFor(5, 21000)).toBe(84)
+    expect(percentileFor(6, 45000)).toBe(73.57)
   })
 
   it('rounds to two decimals', () => {
     expect(percentileFor(3, 3333)).toBe(96.67)
-    expect(percentileFor(5, 23930)).toBe(92.14)
+    expect(percentileFor(5, 23930)).toBe(81.07)
   })
 
   it('caps fast results and clamps slow results', () => {

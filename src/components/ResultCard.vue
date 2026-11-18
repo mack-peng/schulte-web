@@ -55,7 +55,7 @@ function advanceCopy(): void {
 
 function startRotation(): void {
   stopRotation()
-  rotateTimer = setInterval(advanceCopy, 5000)
+  rotateTimer = setInterval(advanceCopy, 20000)
 }
 
 function onVisibilityChange(): void {
