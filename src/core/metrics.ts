@@ -10,8 +10,8 @@ const BANDS: Record<GridSize, [number, number, number]> = {
 const PERCENTILE_ANCHORS: Record<GridSize, [number, number, number]> = {
   3: [3000, 4000, 5000],
   4: [6000, 8000, 16000],
-  5: [20000, 25000, 30000],
-  6: [40000, 50000, 60000]
+  5: [10000, 15000, 25000],
+  6: [14000, 22000, 36000]
 }
 
 function medianSorted(sorted: number[], start = 0, end = sorted.length): number {
